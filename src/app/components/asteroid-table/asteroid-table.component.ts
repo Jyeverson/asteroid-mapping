@@ -1,9 +1,9 @@
-import { AsteroidService } from '../services/asteroid.service';
+import { AsteroidService } from '../../services/asteroid.service';
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { NearEarthObject } from '../interfaces/NearEarthObject';
+import { NearEarthObject } from '../../interfaces/NearEarthObject';
 
 interface AsteroidTableData {
   name: string;

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AsteroidTableComponent } from "./asteroid-table/asteroid-table.component";
-import { AsteroidFiltersComponent } from './asteroid-filters/asteroid-filters.component';
+import { AsteroidTableComponent } from "./components/asteroid-table/asteroid-table.component";
+import { AsteroidFiltersComponent } from './components/asteroid-filters/asteroid-filters.component';
 
 @Component({
   selector: 'app-root',

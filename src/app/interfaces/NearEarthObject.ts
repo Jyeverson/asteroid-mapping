@@ -1,6 +1,6 @@
 import { CloseApproachData } from "./CloseApproachData";
 import { Diameter } from "./EstimatedDiameter";
-import { Links } from "./links";
+import { Links } from "./Links";
 
 export interface NearEarthObject {
   links: Links;

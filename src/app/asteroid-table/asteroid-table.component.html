@@ -1,0 +1,36 @@
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef> Data </th>
+      <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+    </ng-container>
+
+    <!-- Diameter Column -->
+    <ng-container matColumnDef="diameter">
+      <th mat-header-cell *matHeaderCellDef> Diâmetro (km) </th>
+      <td mat-cell *matCellDef="let element"> {{element.diameter}} </td>
+    </ng-container>
+
+    <!-- Dangerous Column -->
+    <ng-container matColumnDef="isDangerous">
+      <th mat-header-cell *matHeaderCellDef> Perigoso </th>
+      <td mat-cell *matCellDef="let element"> {{element.isDangerous ? 'Sim' : 'Não'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of asteroids">
+  </mat-paginator>
+</div>

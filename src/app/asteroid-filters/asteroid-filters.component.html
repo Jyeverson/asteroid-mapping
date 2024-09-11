@@ -1,0 +1,27 @@
+<div class="filters-container">
+  <mat-form-field class="example-form-field">
+    <mat-label>Data de consulta</mat-label>
+    <mat-date-range-input
+      [formGroup]="campaignOne"
+      [rangePicker]="campaignOnePicker"
+      [comparisonStart]="campaignTwo.value.start"
+      [comparisonEnd]="campaignTwo.value.end">
+      <input matStartDate placeholder="Start date" formControlName="start">
+      <input matEndDate placeholder="End date" formControlName="end">
+    </mat-date-range-input>
+    <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Risco</mat-label>
+    <mat-select [(value)]="selected">
+      <mat-option>Todos</mat-option>
+      <mat-option value="dangerous">Perigoso</mat-option>
+      <mat-option value="not_dangerous">Não Perigoso</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" class="filter-button">Filtrar</button>
+</div>

@@ -1,0 +1,24 @@
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-start;
+}
+
+.filters-container mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-button {
+  flex-shrink: 0;
+  width: auto;
+  padding-left: 50px;
+  padding-right: 50px;
+  height: 56px;
+  border-radius: 4px;
+}
+
+.filter-button.mat-flat-button {
+  border-radius: 4px;
+}

@@ -6,6 +6,7 @@ import {MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE} from '@angular/material/
 import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
+import moment from 'moment';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -41,13 +42,15 @@ export const MY_DATE_FORMATS = {
   ],
 })
 export class AsteroidFiltersComponent {
+
   readonly campaignOne = new FormGroup({
-    start: new FormControl(new Date()),
-    end: new FormControl(new Date()),
+    start: new FormControl(moment()),
+    end: new FormControl(moment()),
   });
+
   readonly campaignTwo = new FormGroup({
-    start: new FormControl(new Date()),
-    end: new FormControl(new Date()),
+    start: new FormControl(moment()),
+    end: new FormControl(moment()),
   });
 
   selected = 'Todos';

@@ -3,13 +3,16 @@
     <mat-label>Data de consulta</mat-label>
     <mat-date-range-input
       [formGroup]="campaignOne"
-      [rangePicker]="campaignOnePicker"
-      [comparisonStart]="campaignTwo.value.start"
-      [comparisonEnd]="campaignTwo.value.end">
+      [rangePicker]="campaignOnePicker">
       <input matStartDate placeholder="Start date" formControlName="start">
       <input matEndDate placeholder="End date" formControlName="end">
     </mat-date-range-input>
-    <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+    <mat-hint *ngIf="!campaignOne.errors?.['dateRangeInvalid']">
+      DD/MM/YYYY – DD/MM/YYYY
+    </mat-hint>
+    <mat-hint *ngIf="campaignOne.errors?.['dateRangeInvalid']" class="error-message">
+      Período máximo de 7 dias!
+    </mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
     <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
   </mat-form-field>
@@ -23,5 +26,7 @@
     </mat-select>
   </mat-form-field>
 
-  <button (click)="filter()" mat-flat-button color="primary" class="filter-button">Filtrar</button>
+  <button (click)="filter()" mat-flat-button color="primary" class="filter-button" [disabled]="campaignOne.invalid">Filtrar</button>
+
+
 </div>

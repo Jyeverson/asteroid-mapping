@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, NG_VALIDATORS, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -7,6 +7,8 @@ import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-a
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {AsteroidTableService} from '../../services/asteroid/asteroid-table.service'
+import { CommonModule } from '@angular/common';
+import { dateRangeValidator } from '../../validators/date-range-validator';
 import moment from 'moment';
 
 export const MY_DATE_FORMATS = {
@@ -31,7 +33,8 @@ export const MY_DATE_FORMATS = {
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule
   ],
   templateUrl: './asteroid-filters.component.html',
   styleUrl: './asteroid-filters.component.scss',
@@ -39,50 +42,44 @@ export const MY_DATE_FORMATS = {
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
-    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    {provide: NG_VALIDATORS, useExisting: dateRangeValidator, multi: true}
   ],
 })
 export class AsteroidFiltersComponent implements OnInit{
-
-  constructor(private asteroidTableService: AsteroidTableService) {}
-
-  dataInicial: string = '';
-  dataFinal: string = '';
+  readonly end = new FormControl('', [Validators.required, dateRangeValidator]);
+  campaignOne: FormGroup;
+  initialDate: string = '';
+  finalDate: string = '';
   selected = 'Todos';
   today = moment().format('YYYY-MM-DD');
 
-  readonly campaignOne = new FormGroup({
-    start: new FormControl(moment()),
-    end: new FormControl(moment()),
-  });
-
-  readonly campaignTwo = new FormGroup({
-    start: new FormControl(moment()),
-    end: new FormControl(moment()),
-  });
-
+  constructor(private asteroidTableService: AsteroidTableService, private fb: FormBuilder) {
+    this.campaignOne = this.fb.group({
+      start: [this.today, Validators.required],
+      end: [this.today, Validators.required]
+    }, { validators: dateRangeValidator() });
+  }
 
   ngOnInit(): void {
     this.asteroidTableService.callGenerateTable(this.today, this.today, this.selected);
 
     this.campaignOne.valueChanges.subscribe(value => {
-    this.atualizarDatas(value);
+      this.atualizarDatas(value);
     });
 
-    this.atualizarDatas(this.campaignOne.value);
   }
 
   atualizarDatas(value: any) {
     const start = value.start ? moment(value.start).format('YYYY-MM-DD') : '';
     const end = value.end ? moment(value.end).format('YYYY-MM-DD') : '';
 
-    this.dataInicial = start;
-    this.dataFinal = end;
-
+    this.initialDate = start;
+    this.finalDate = end;
   }
 
   filter() {
-    this.asteroidTableService.callGenerateTable(this.dataInicial, this.dataFinal, this.selected ?? 'every');
+      this.asteroidTableService.callGenerateTable(this.initialDate, this.finalDate, this.selected ?? 'every');
   }
 
 }

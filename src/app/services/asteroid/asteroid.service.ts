@@ -14,7 +14,6 @@ export class AsteroidService {
   constructor(private http: HttpClient) { }
 
   getNearEarthObjects(initial_date: String, final_date: String): Observable<ApiResponse> {
-    console.log(initial_date + "   : " + final_date);
     return this.http.get<ApiResponse>(`${this.apiUrl}?start_date=${initial_date}&end_date=${final_date}&api_key=${environment.API_KEY}`);
   }
 

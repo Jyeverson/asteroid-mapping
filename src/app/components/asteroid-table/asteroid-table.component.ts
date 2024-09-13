@@ -1,16 +1,9 @@
-import { AsteroidService } from '../../services/asteroid.service';
+import { AsteroidService } from '../../services/asteroid/asteroid.service';
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { NearEarthObject } from '../../interfaces/NearEarthObject';
-
-interface AsteroidTableData {
-  name: string;
-  date: string;
-  diameter: number;
-  isDangerous: boolean;
-}
+import { AsteroidTableService } from '../../services/asteroid/asteroid-table.service';
 
 @Component({
   selector: 'app-asteroid-table',
@@ -19,39 +12,38 @@ interface AsteroidTableData {
   templateUrl: './asteroid-table.component.html',
   styleUrl: './asteroid-table.component.scss'
 })
-export class AsteroidTableComponent implements OnInit, AfterViewInit {
+export class AsteroidTableComponent implements AfterViewInit {
   displayedColumns: string[] = ['name', 'date', 'diameter', 'isDangerous'];
-  dataSource = new MatTableDataSource<AsteroidTableData>([]);
+  dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private asteroidService: AsteroidService) {}
+  constructor(private asteroidService: AsteroidService, private asteroidTableService: AsteroidTableService) {
+    this.asteroidTableService.setAsteroidTableComponent(this);
+  }
 
-  ngOnInit() {
-
-    this.asteroidService.getNearEarthObjects().subscribe({
+  generateTable(initial_date: string, final_date: string, risk: string) {
+    this.asteroidService.getNearEarthObjects(initial_date, final_date).subscribe({
       next: (data) => {
-        const allAsteroids: AsteroidTableData[] = [];
-        for (const date in data.near_earth_objects) {
-          if (data.near_earth_objects.hasOwnProperty(date)) {
-            const asteroidsForDate = data.near_earth_objects[date];
-            const asteroids: AsteroidTableData[] = asteroidsForDate.map((asteroid: NearEarthObject) => ({
-              name: asteroid.name,
-              date: asteroid.close_approach_data[0]?.close_approach_date || 'N/A',
-              diameter: asteroid.estimated_diameter.kilometers.estimated_diameter_max,
-              isDangerous: asteroid.is_potentially_hazardous_asteroid
-            }));
-            allAsteroids.push(...asteroids);
-          }
+        let allAsteroids = Object.values(data.near_earth_objects).flat().map((asteroid: any) => ({
+          name: asteroid.name,
+          date: asteroid.close_approach_data[0]?.close_approach_date || 'N/A',
+          diameter: asteroid.estimated_diameter.kilometers.estimated_diameter_max,
+          isDangerous: asteroid.is_potentially_hazardous_asteroid
+        }));
+
+        if (risk === 'dangerous') {
+          allAsteroids = allAsteroids.filter(asteroid => asteroid.isDangerous);
+        } else if (risk === 'not_dangerous') {
+          allAsteroids = allAsteroids.filter(asteroid => !asteroid.isDangerous);
         }
+
+      this.dataSource.data = allAsteroids;
         this.dataSource.data = allAsteroids;
       },
-      error: (error) => {
-      console.error('Error getting data from asteroids:', error);
-      },
-      complete: () => {
-        console.log('Request complete');
-      }
+
+      error: (error) => console.error('Error getting asteroid data: ', error),
+      complete: () => console.log('Request completed')
     });
   }
 

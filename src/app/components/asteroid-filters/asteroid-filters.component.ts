@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -6,6 +6,7 @@ import {MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE} from '@angular/material/
 import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
+import {AsteroidTableService} from '../../services/asteroid/asteroid-table.service'
 import moment from 'moment';
 
 export const MY_DATE_FORMATS = {
@@ -41,7 +42,14 @@ export const MY_DATE_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
   ],
 })
-export class AsteroidFiltersComponent {
+export class AsteroidFiltersComponent implements OnInit{
+
+  constructor(private asteroidTableService: AsteroidTableService) {}
+
+  dataInicial: string = '';
+  dataFinal: string = '';
+  selected = 'Todos';
+  today = moment().format('YYYY-MM-DD');
 
   readonly campaignOne = new FormGroup({
     start: new FormControl(moment()),
@@ -53,6 +61,28 @@ export class AsteroidFiltersComponent {
     end: new FormControl(moment()),
   });
 
-  selected = 'Todos';
+
+  ngOnInit(): void {
+    this.asteroidTableService.callGenerateTable(this.today, this.today, this.selected);
+
+    this.campaignOne.valueChanges.subscribe(value => {
+    this.atualizarDatas(value);
+    });
+
+    this.atualizarDatas(this.campaignOne.value);
+  }
+
+  atualizarDatas(value: any) {
+    const start = value.start ? moment(value.start).format('YYYY-MM-DD') : '';
+    const end = value.end ? moment(value.end).format('YYYY-MM-DD') : '';
+
+    this.dataInicial = start;
+    this.dataFinal = end;
+
+  }
+
+  filter() {
+    this.asteroidTableService.callGenerateTable(this.dataInicial, this.dataFinal, this.selected ?? 'every');
+  }
 
 }

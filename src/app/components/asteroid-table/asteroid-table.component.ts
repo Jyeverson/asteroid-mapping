@@ -4,11 +4,13 @@ import { RouterOutlet } from '@angular/router';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { AsteroidTableService } from '../../services/asteroid/asteroid-table.service';
+import { CommonModule } from '@angular/common';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-asteroid-table',
   standalone: true,
-  imports: [RouterOutlet, MatPaginatorModule, MatTableModule],
+  imports: [RouterOutlet, MatPaginatorModule, MatTableModule, CommonModule, MatProgressBarModule],
   templateUrl: './asteroid-table.component.html',
   styleUrl: './asteroid-table.component.scss'
 })
@@ -17,12 +19,14 @@ export class AsteroidTableComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  isLoading: boolean = false;
 
   constructor(private asteroidService: AsteroidService, private asteroidTableService: AsteroidTableService) {
     this.asteroidTableService.setAsteroidTableComponent(this);
   }
 
   generateTable(initial_date: string, final_date: string, risk: string) {
+    this.isLoading = true;
     this.asteroidService.getNearEarthObjects(initial_date, final_date).subscribe({
       next: (data) => {
         let allAsteroids = Object.values(data.near_earth_objects).flat().map((asteroid: any) => ({
@@ -38,8 +42,9 @@ export class AsteroidTableComponent implements AfterViewInit {
           allAsteroids = allAsteroids.filter(asteroid => !asteroid.isDangerous);
         }
 
-      this.dataSource.data = allAsteroids;
         this.dataSource.data = allAsteroids;
+        this.dataSource.data = allAsteroids;
+        this.isLoading = false;
       },
 
       error: (error) => console.error('Error getting asteroid data: ', error),

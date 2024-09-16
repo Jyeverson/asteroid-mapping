@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AsteroidTableComponent } from '../../components/asteroid-table/asteroid-table.component';
+import { AsteroidTableComponent } from '../components/table/table.component';
 
 @Injectable({
   providedIn: 'root'

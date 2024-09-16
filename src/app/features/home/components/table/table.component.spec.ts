@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AsteroidFiltersComponent } from './asteroid-filters.component';
+import { AsteroidTableComponent } from './table.component';
 
-describe('AsteroidFiltersComponent', () => {
-  let component: AsteroidFiltersComponent;
-  let fixture: ComponentFixture<AsteroidFiltersComponent>;
+describe('AsteroidTableComponent', () => {
+  let component: AsteroidTableComponent;
+  let fixture: ComponentFixture<AsteroidTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AsteroidFiltersComponent]
+      imports: [AsteroidTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AsteroidFiltersComponent);
+    fixture = TestBed.createComponent(AsteroidTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

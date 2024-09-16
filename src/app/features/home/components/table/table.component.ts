@@ -1,21 +1,25 @@
-import { AsteroidService } from '../../services/asteroid/asteroid.service';
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { AsteroidService } from '../../services/asteroid.service';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { AsteroidTableService } from '../../services/asteroid/asteroid-table.service';
+import { AsteroidTableService } from '../../services/asteroid-table.service';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
-  selector: 'app-asteroid-table',
+  selector: 'asteroid-table',
   standalone: true,
-  imports: [RouterOutlet, MatPaginatorModule, MatTableModule, CommonModule, MatProgressBarModule],
-  templateUrl: './asteroid-table.component.html',
-  styleUrl: './asteroid-table.component.scss'
+  imports: [MatPaginatorModule, MatTableModule, CommonModule, MatProgressBarModule, MatIconModule],
+  templateUrl: './table.component.html',
+  styleUrl: './table.component.scss'
 })
 export class AsteroidTableComponent implements AfterViewInit {
-  displayedColumns: string[] = ['name', 'date', 'diameter', 'isDangerous'];
+  onIconClick(element: any) {
+    console.log('Ícone clicado para o elemento:', element);
+  }
+
+  displayedColumns: string[] = ['name', 'date', 'diameter', 'isDangerous', 'actions'];
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

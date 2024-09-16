@@ -6,7 +6,7 @@ import {MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE} from '@angular/material/
 import {MatMomentDateModule, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-import {AsteroidTableService} from '../../services/asteroid/asteroid-table.service'
+import {AsteroidTableService} from '../../services/asteroid-table.service'
 import { CommonModule } from '@angular/common';
 import { dateRangeValidator } from '../../validators/date-range-validator';
 import moment from 'moment';
@@ -24,7 +24,7 @@ export const MY_DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'app-asteroid-filters',
+  selector: 'filter',
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -36,8 +36,8 @@ export const MY_DATE_FORMATS = {
     MatButtonModule,
     CommonModule
   ],
-  templateUrl: './asteroid-filters.component.html',
-  styleUrl: './asteroid-filters.component.scss',
+  templateUrl: './filter.component.html',
+  styleUrl: './filter.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -65,12 +65,12 @@ export class AsteroidFiltersComponent implements OnInit{
     this.asteroidTableService.callGenerateTable(this.today, this.today, this.selected);
 
     this.campaignOne.valueChanges.subscribe(value => {
-      this.atualizarDatas(value);
+      this.updateDates(value);
     });
 
   }
 
-  atualizarDatas(value: any) {
+  updateDates(value: any) {
     const start = value.start ? moment(value.start).format('YYYY-MM-DD') : '';
     const end = value.end ? moment(value.end).format('YYYY-MM-DD') : '';
 

@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { AsteroidService } from './asteroid.service';
 
 describe('AsteroidService', () => {

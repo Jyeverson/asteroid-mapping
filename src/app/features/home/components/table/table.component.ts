@@ -6,17 +6,25 @@ import { AsteroidTableService } from '../../services/asteroid-table.service';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import {MatIconModule} from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'asteroid-table',
+  selector: 'app-table',
   standalone: true,
-  imports: [MatPaginatorModule, MatTableModule, CommonModule, MatProgressBarModule, MatIconModule],
+  imports: [MatPaginatorModule, MatTableModule, CommonModule, MatProgressBarModule, MatIconModule, RouterModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss'
 })
 export class AsteroidTableComponent implements AfterViewInit {
+
+  constructor(private asteroidService: AsteroidService, private asteroidTableService: AsteroidTableService, private router: Router) {
+    this.asteroidTableService.setAsteroidTableComponent(this);
+  }
+
   onIconClick(element: any) {
     console.log('Ícone clicado para o elemento:', element);
+    this.router.navigate(['/orbit']);
   }
 
   displayedColumns: string[] = ['name', 'date', 'diameter', 'isDangerous', 'actions'];
@@ -25,9 +33,6 @@ export class AsteroidTableComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isLoading: boolean = false;
 
-  constructor(private asteroidService: AsteroidService, private asteroidTableService: AsteroidTableService) {
-    this.asteroidTableService.setAsteroidTableComponent(this);
-  }
 
   generateTable(initial_date: string, final_date: string, risk: string) {
     this.isLoading = true;

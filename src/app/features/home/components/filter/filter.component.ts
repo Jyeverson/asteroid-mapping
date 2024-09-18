@@ -24,7 +24,7 @@ export const MY_DATE_FORMATS = {
 };
 
 @Component({
-  selector: 'filter',
+  selector: 'app-filter',
   standalone: true,
   imports: [
     MatFormFieldModule,

@@ -2,6 +2,6 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './features/home/components/home-page/home.component';
 
 export const routes: Routes = [
-  { path: '**', component: HomeComponent },
-  { path: 'home-component', component: HomeComponent },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent }
 ];
